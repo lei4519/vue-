@@ -3,6 +3,8 @@
     <div id="cover"></div>
     <Header></Header>
     <router-view></router-view>
+    <!-- <Notification content="test notify"/> -->
+    <!-- <button @click="notify">click me</button> -->
     <Footer></Footer>
   </div>
 </template>
@@ -10,7 +12,7 @@
 <script>
 import Header from './layout/header.vue'
 import Footer from './layout/footer.vue'
-
+let i = 0
 export default {
   metaInfo: {
     title: 'Jokcy\'s Todo App'
@@ -18,6 +20,14 @@ export default {
   components: {
     Header,
     Footer
+  },
+  methods: {
+    notify() {
+      this.$notify({
+        content: `test function notify. index: ${i++}`,
+        btn: 'close'
+      })
+    }
   }
 }
 </script>

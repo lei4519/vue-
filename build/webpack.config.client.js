@@ -35,6 +35,11 @@ const defaultPlugins = [
 if (isDev) {
   config = merge(baseConfig, {
     devServer,
+    output: {
+      filename: 'bundle.[hash:8].js',
+      path: path.resolve(__dirname, '../public'),
+      publicPath: '/'
+    },
     devtool: '#cheap-module-eval-source-map',
     plugins: defaultPlugins.concat([
       new webpack.HotModuleReplacementPlugin()

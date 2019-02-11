@@ -1,17 +1,23 @@
 <template>
   <section class="real-app">
+    <div class="tabs-container">
+      <tabs :value="filter" @toggle="toggleFilter">
+        <tab :lable="tab" :index="tab" v-for="tab in states" :key="tab"></tab>
+      </tabs>
+    </div>
     <input
       type="text"
       class="add-input"
       autofocus="autofocus"
       placeholder="接下去要做什么?"
       @keyup.enter="addTodo"
+      v-model="inputContent"
     >
     <Item :todo="todo" v-for="todo in filteredTodos" :key="todo.id" @del="deleteTodo"/>
-    <Tabs
+    <helper
       :filter="filter"
       :todos="todos"
-      @togole="togoleFilter"
+      @toggle="toggleFilter"
       @clearAllCompleted="clearAllCompleted"
     />
   </section>
@@ -19,7 +25,7 @@
 
 <script>
 import Item from './item.vue'
-import Tabs from './tabs.vue'
+import Helper from './helper.vue'
 let id = 0
 
 export default {
@@ -29,12 +35,14 @@ export default {
   data() {
     return {
       todos: [],
-      filter: 'all'
+      filter: 'all',
+      states: ['all', 'active', 'completed'],
+      inputContent: ''
     }
   },
   components: {
     Item,
-    Tabs
+    Helper
   },
   computed: {
     filteredTodos() {
@@ -58,7 +66,7 @@ export default {
     deleteTodo(id) {
       this.todos.splice(this.todos.findIndex(todo => todo.id == id), 1)
     },
-    togoleFilter(state) {
+    toggleFilter(state) {
       this.filter = state
     },
     clearAllCompleted() {
@@ -93,6 +101,9 @@ export default {
   border: none;
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
   background-color: transparent;
+}
+.tabs-container {
+  padding: 0 10px;
 }
 </style>
 

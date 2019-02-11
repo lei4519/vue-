@@ -15,7 +15,14 @@ let config = {
   },
   module: {
     rules: [
-      {test: /\.vue$/, use: 'vue-loader'},
+      {
+        test: /\.vue$/, 
+        use: 'vue-loader'
+      },
+      {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader'
+      },
       {test: /\.(gif|jpg|jpeg|png|svg)$/, use: [
         {
           loader: 'url-loader',

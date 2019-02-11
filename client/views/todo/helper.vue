@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     toggleFilter(state) {
-      this.$emit('togole', state)
+      this.$emit('toggle', state)
     },
     clearAllCompleted() {
       this.$emit('clearAllCompleted')
