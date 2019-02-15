@@ -17,6 +17,10 @@ const devServer = {
   historyApiFallback: {
     index: '/index.html'
   },
+  proxy: {
+    '/api': 'http://localhost:3333',
+    '/user': 'http://localhost:3333'
+  },
   open: true,
   hot: true
 }

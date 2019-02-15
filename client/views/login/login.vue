@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   metaInfo: {
     title: 'Logo Page'
@@ -38,7 +40,20 @@ export default {
     doSubmit(e) {
       e.preventDefault()
       if (this.validate()) {
-
+        axios.post('http://localhost:3333/user/login', {
+          username: this.username,
+          password: this.password
+        })
+          .then(({ data }) => {
+            if (data.success) {
+              this.$router.push('/')
+            } else {
+              this.errorMsg = data.message
+            }
+          })
+          .catch((err, a) => {
+            console.log(err)
+          })
       }
     },
     validate() {
@@ -74,10 +89,11 @@ export default {
   }
 }
 .login-input {
+  font-size: 16px;
   width: 100%;
   height: 40px;
   margin: 10px 0;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   box-shadow: 0 0 5px #999;
@@ -86,7 +102,7 @@ export default {
 .login-btn {
   display: block;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
   border: 0;
   padding: 0;
   line-height: 40px;

@@ -5,7 +5,7 @@ import Meta from 'vue-meta'
 
 import App from './app.vue'
 import createRouter from './config/router'
-import createStore from '../store/store'
+import createStore from './store/store'
 import Notification from './components/notification'
 import Tabs from './components/tabs'
 import './assets/scss/global.css'
