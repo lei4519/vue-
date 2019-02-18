@@ -1,15 +1,15 @@
 ## vue深精透
 
 ### 项目介绍
-  - 用vue的各种技术实现一个todolist，没有过多的业务逻辑代码，主要在于深挖vue的各种技能要点。
+  - 使用vue的服务端渲染/router/vuex等各种技术实现todolist，深入学习vue的各种技能要点。
 
 ### 项目收获
+  - 使用webpack4, 从零搭建开发和生产环境
   - 使用koa搭建node服务，实现服务端渲染，分别实现开发和生产环境下的服务端渲染
-    - 开发环境中使用webpack API创建webpack Compiler打包服务端bundle，将文件存入内存中提高速度
+    - 开发环境中使用webpack API创建Compiler实例在nodejs运行时打包服务端bundle，将打包后文件存入内存中提高读写速度
     - 生产环境下直接使用打包好的bundle文件渲染vue实例
   - 开发notify插件，使用extends来拓展基础组件，控制多个notify在页面中显示的顺序
   - 开发了Tabs插件，使用slot插槽动态插入内容，使用依赖注入实现上下级组件通信
-  - 从零配置webpack, 配置babel、scss、vue-jsx语法支持
   
 
 ### 服务端渲染流程

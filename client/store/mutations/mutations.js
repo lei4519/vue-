@@ -18,5 +18,11 @@ export default {
   },
   doLogin(state, userInfo) {
     state.user = userInfo
+  },
+  startLoading(state) {
+    state.loading = true
+  },
+  endLoading(state) {
+    state.loading = false
   }
 }

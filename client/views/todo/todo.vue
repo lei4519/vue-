@@ -14,12 +14,14 @@
       v-model="inputContent"
     >
     <div class="todo-container">
-      <div class="scroll-view" ref="scrollView">
-        <Item :todo="todo"
-        v-for="todo in filteredTodos"
-        :key="todo.id"
-        @del="deleteTodo"
-        @toggle="toggleTodoState"/>
+      <div class="scroll-view">
+        <Item
+          :todo="todo"
+          v-for="todo in filteredTodos"
+          :key="todo.id"
+          @del="deleteTodo"
+          @toggle="toggleTodoState"
+        />
       </div>
     </div>
     <helper
@@ -35,15 +37,23 @@
 import Item from './item.vue'
 import Helper from './helper.vue'
 let id = 0
-let translateY = 0
+
 import { mapState, mapActions } from 'vuex'
+import { debug } from 'util';
 export default {
   metaInfo: {
     title: 'The Todo App'
   },
   mounted() {
-    this.fetchTodos()
-    this.$refs.scrollView.addEventListener('mousewheel', this.todoScroll)
+    if (this.todos && this.todos.length < 1) {
+      this.fetchTodos()
+    }
+  },
+  asyncData({ store }) {
+    if (store.state.user) {
+      return store.dispatch('fetchTodos')
+    }
+    return Promise.resolve()
   },
   data() {
     return {
@@ -69,7 +79,7 @@ export default {
       'updateTodo',
       'deleteTodo',
       'deleteAllCompleted'
-      ]),
+    ]),
     handleAdd(e) {
       const content = e.target.value.trim()
       if (!content) {
@@ -98,16 +108,6 @@ export default {
     },
     toggleFilter(state) {
       this.filter = state
-    },
-    todoScroll(e) {
-      const box = this.$refs.scrollView
-      const boxHeight = box.offsetHeight
-      // const wrapperHeight = box.parent.offsetHeight
-      console.log(box.parent);
-      translateY = translateY + e.wheelDeltaY
-      translateY = Math.max(-boxHeight, Math.min(0, translateY))
-      console.log(translateY);
-      box.style.transform = `translateY(${translateY}px)`
     }
   },
   components: {
@@ -146,9 +146,28 @@ export default {
 .tabs-container {
   padding: 0 10px;
 }
-.todo-container{
+.todo-container {
+  position: relative;
   max-height: 295px;
-  overflow: hidden;
+  overflow: auto;
+}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 </style>
 

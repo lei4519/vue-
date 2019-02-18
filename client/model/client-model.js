@@ -31,7 +31,7 @@ export default {
   getAllTodos() {
     return handleRequest(request.get('/api/todos'))
   },
-  createTodo(todo) {
+  addTodo(todo) {
     return handleRequest(request.post('/api/todo', todo))
   },
   updateTodo(id, todo) {
@@ -40,7 +40,7 @@ export default {
   deleteTodo(id) {
     return handleRequest(request.delete(`/api/todo/${id}`))
   },
-  deleteAllCompleted(ids) {
+  deleteCompleted(ids) {
     return handleRequest(request.post('/api/delete/completed', {ids}))
   },
   login(username, password) {
