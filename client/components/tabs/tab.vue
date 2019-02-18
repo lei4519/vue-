@@ -9,6 +9,7 @@
 let index = 0
 export default {
   name: 'Tab',
+  inject: ['Tab'],
   props: {
     index: {
       type: [String, Number]
@@ -28,17 +29,17 @@ export default {
       return this.index ? this.index : this.i
     },
     active() {
-      return this.$parent.currentIndex === this.idx
-      
+      return this.Tab.currentIndex === this.idx
+
     }
   },
   methods: {
     changeIndex() {
-      this.$parent.changeIndex(this.idx)
+      this.Tab.changeIndex(this.idx)
     }
   },
   mounted() {
-    this.$parent.panes.push(this)
+    this.Tab.panes.push(this)
   }
 }
 </script>

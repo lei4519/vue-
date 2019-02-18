@@ -33,7 +33,7 @@ export default {
     title: 'The Todo App'
   },
   mounted() {
-   this.fetchTodos()
+    this.fetchTodos()
   },
   data() {
     return {

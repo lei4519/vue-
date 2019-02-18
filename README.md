@@ -1,9 +1,23 @@
-# 服务端渲染流程
-##  1. 运行npm run dev:server
-- 开始执行/server/server.js中的代码
-## 2. server.js
+## vue深精透
+
+### 项目介绍
+  - 用vue的各种技术实现一个todolist，没有过多的业务逻辑代码，主要在于深挖vue的各种技能要点。
+
+### 项目收获
+  - 使用koa搭建node服务，实现服务端渲染，分别实现开发和生产环境下的服务端渲染
+    - 开发环境中使用webpack API创建webpack Compiler打包服务端bundle，将文件存入内存中提高速度
+    - 生产环境下直接使用打包好的bundle文件渲染vue实例
+  - 开发notify插件，使用extends来拓展基础组件，控制多个notify在页面中显示的顺序
+  - 开发了Tabs插件，使用slot插槽动态插入内容，使用依赖注入实现上下级组件通信
+  - 从零配置webpack, 配置babel、scss、vue-jsx语法支持
+  
+
+### 服务端渲染流程
+  - 1. 运行npm run dev:server
+    - 开始执行/server/server.js中的代码
+### 2. server.js
 - 启动了node服务, 监听端口等. 定义了处理错误的中间件, 引入并使用了dev-ssr配置项文件:'./routers/dev-ssr.js'
-## 3. dev-ssr.js
+### 3. dev-ssr.js
   1. 首先引入webpack服务端渲染配置文件, 使用配置文件调用webpack Node Api创建解析器实例, 解析器可以在node中运行来打包服务端渲染所需要的json包文件
   2. 修改解析器的文件读写系统, 更改为memory-fs, 使打包后的文件存储在内存中, 而不是写在硬盘里, 以提升运行速度
   3. 调用webpack解析器的watch方法, 就会开始执行打包服务端渲染的配置文件. 在之后检测到文件变更时, 就会自动重新编译
@@ -27,7 +41,7 @@
       6. 使用ejs手动注入html内容, 向客户端响应html. 至此 结束
       ```
 
-## 要点代码
+### 核心代码
 > 服务端渲染的原理就是使用vue提供给我们的vue-server-renderer包, 将我们写好的vue应用转化为字符串. 所以最核心的代码就是以下3点
 1. 使用工厂函数导出vue应用 避免服务端访问导致的交叉请求状态污染
 ```javascript

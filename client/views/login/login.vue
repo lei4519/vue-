@@ -24,35 +24,34 @@
 
 <script>
 import axios from 'axios'
-
+import { mapActions } from 'vuex';
 export default {
   metaInfo: {
     title: 'Logo Page'
   },
   data() {
     return {
-      username: '',
-      password: '',
+      username: 'admin',
+      password: 'admin',
       errorMsg: ''
     }
   },
   methods: {
+    ...mapActions(['login']),
     doSubmit(e) {
       e.preventDefault()
       if (this.validate()) {
-        axios.post('http://localhost:3333/user/login', {
+        this.login({
           username: this.username,
           password: this.password
         })
-          .then(({ data }) => {
-            if (data.success) {
-              this.$router.push('/')
-            } else {
-              this.errorMsg = data.message
-            }
+          .then(() => {
+            this.$router.replace('/')
           })
-          .catch((err, a) => {
-            console.log(err)
+          .catch(err => {
+            this.$notify({
+              content: err.message
+            })
           })
       }
     },

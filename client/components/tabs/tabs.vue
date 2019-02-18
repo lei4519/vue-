@@ -2,6 +2,11 @@
 import TabContainer from './tab-container.vue'
 export default {
   name: 'Tabs',
+  provide() {
+    return {
+      Tab: this
+    }
+  },
   props: {
     value: {
       type: [String, Number]
