@@ -9,15 +9,14 @@ userRouter
         username: 'admin'
       }
       ctx.body = {
-        success: true,
+        status: 200,
         data: {
           username: 'admin'
         }
       }
     } else {
-      ctx.status = 400
       ctx.body = {
-        success: false,
+        status:400,
         message: 'username or password error'
       }
     }

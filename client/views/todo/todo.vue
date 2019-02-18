@@ -10,10 +10,18 @@
       class="add-input"
       autofocus="autofocus"
       placeholder="接下去要做什么?"
-      @keyup.enter="addTodo"
+      @keyup.enter="handleAdd"
       v-model="inputContent"
     >
-    <Item :todo="todo" v-for="todo in filteredTodos" :key="todo.id" @del="deleteTodo"/>
+    <div class="todo-container">
+      <div class="scroll-view" ref="scrollView">
+        <Item :todo="todo"
+        v-for="todo in filteredTodos"
+        :key="todo.id"
+        @del="deleteTodo"
+        @toggle="toggleTodoState"/>
+      </div>
+    </div>
     <helper
       :filter="filter"
       :todos="todos"
@@ -27,6 +35,7 @@
 import Item from './item.vue'
 import Helper from './helper.vue'
 let id = 0
+let translateY = 0
 import { mapState, mapActions } from 'vuex'
 export default {
   metaInfo: {
@@ -34,6 +43,7 @@ export default {
   },
   mounted() {
     this.fetchTodos()
+    this.$refs.scrollView.addEventListener('mousewheel', this.todoScroll)
   },
   data() {
     return {
@@ -53,23 +63,51 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchTodos']),
-    // addTodo(e) {
-    //   this.todos.unshift({
-    //     id: id++,
-    //     content: e.target.value.trim(),
-    //     completed: false
-    //   })
-    //   e.target.value = ''
-    // },
-    deleteTodo(id) {
-      this.todos.splice(this.todos.findIndex(todo => todo.id == id), 1)
+    ...mapActions([
+      'fetchTodos',
+      'addTodo',
+      'updateTodo',
+      'deleteTodo',
+      'deleteAllCompleted'
+      ]),
+    handleAdd(e) {
+      const content = e.target.value.trim()
+      if (!content) {
+        return this.$notify({
+          content: '请输入要做的内容'
+        })
+      }
+      const todo = {
+        id: id++,
+        content,
+        completed: false
+      }
+      this.addTodo(todo)
+      this.inputContent = ''
+    },
+    toggleTodoState(todo) {
+      this.updateTodo({
+        id: todo.id,
+        todo: Object.assign({}, todo, {
+          completed: !todo.completed
+        })
+      })
+    },
+    clearAllCompleted() {
+      this.deleteAllCompleted()
     },
     toggleFilter(state) {
       this.filter = state
     },
-    clearAllCompleted() {
-      this.todos = this.todos.filter(todo => !todo.completed)
+    todoScroll(e) {
+      const box = this.$refs.scrollView
+      const boxHeight = box.offsetHeight
+      // const wrapperHeight = box.parent.offsetHeight
+      console.log(box.parent);
+      translateY = translateY + e.wheelDeltaY
+      translateY = Math.max(-boxHeight, Math.min(0, translateY))
+      console.log(translateY);
+      box.style.transform = `translateY(${translateY}px)`
     }
   },
   components: {
@@ -82,7 +120,7 @@ export default {
 <style lang="scss" scoped>
 .real-app {
   width: 600px;
-  margin: 200px auto;
+  margin: auto;
   box-shadow: 0 0 5px #666;
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -107,6 +145,10 @@ export default {
 }
 .tabs-container {
   padding: 0 10px;
+}
+.todo-container{
+  max-height: 295px;
+  overflow: hidden;
 }
 </style>
 

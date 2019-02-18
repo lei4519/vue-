@@ -45,7 +45,7 @@ serverCompiler.watch({}, (err, stats) => {
     'vue-ssr-server-bundle.json'
   )
   bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
-  console.log('new bundle generated')
+  console.log('new server bundle generated')
 })
 
 // 执行ssr的中间件

@@ -39,6 +39,7 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
+  display: flex;
   #cover {
     position: absolute;
     left: 0;

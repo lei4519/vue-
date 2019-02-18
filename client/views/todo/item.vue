@@ -1,6 +1,6 @@
 <template>
   <div :class="['todo-item',todo.completed ? 'completed': '']">
-    <input type="checkbox" class="toggle" v-model="todo.completed">
+    <input type="checkbox" class="toggle" :checked="todo.completed" @click.prevnet="handleToggle">
     <label>{{todo.content}}</label>
     <button class="destory" @click="deleteTodo"></button>
   </div>
@@ -17,6 +17,9 @@ export default {
   methods: {
     deleteTodo() {
       this.$emit('del', this.todo.id)
+    },
+    handleToggle(e) {
+      this.$emit('toggle', this.todo)
     }
   }
 }
