@@ -47,7 +47,8 @@ app.use(koaBody())
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(staticRouter.routes()).use(staticRouter.allowedMethods())
 app.use(apiRouter.routes()).use(apiRouter.allowedMethods())
-const pageRouter = isDev ? require('./routers/dev-ssr') : require('./routers/ssr')
+const pageRouter = isDev ? require('./routers/dev-ssr') : require('./routers/ssr-no-bundle.js')
+// const pageRouter = isDev ? require('./routers/dev-ssr-no-bundle.js') : require('./routers/ssr')
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
 
 const HOST = process.env.HOST || 'localhost'

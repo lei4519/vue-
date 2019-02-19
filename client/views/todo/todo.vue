@@ -44,15 +44,16 @@ export default {
   metaInfo: {
     title: 'The Todo App'
   },
-  mounted() {
-    if (this.todos && this.todos.length < 1) {
-      this.fetchTodos()
-    }
-  },
-  asyncData({ store }) {
+  // mounted() {
+  //   if (this.todos && this.todos.length < 1) {
+  //     this.fetchTodos()
+  //   }
+  // },
+  asyncData({ store, router }) {
     if (store.state.user) {
       return store.dispatch('fetchTodos')
     }
+    router.replace('/login')
     return Promise.resolve()
   },
   data() {

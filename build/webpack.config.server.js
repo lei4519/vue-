@@ -23,13 +23,14 @@ config = merge(baseConfig, {
   },
   externals: Object.keys(require('../package').dependencies),
   devtool: 'source-map',
-  plugins: defaultPlugins.concat([
-    new VueServerPlugin()
-  ])
+  plugins: defaultPlugins
 })
 config.resolve = {
   alias: {
     'model': path.join(__dirname, '../client/model/server-model.js')
   }
+}
+if (isDev) {
+  config.plugins.push(new VueServerPlugin())
 }
 module.exports = config

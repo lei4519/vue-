@@ -7,6 +7,7 @@ const validateUser = async (ctx, next) => {
       status: 401,
       message: 'you need login!'
     }
+    
   } else {
     await next()
   }

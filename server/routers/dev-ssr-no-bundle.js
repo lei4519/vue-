@@ -6,7 +6,12 @@ const MemoryFs = require('memory-fs')
 const webpack = require('webpack')
 const VueServerRenderer = require('vue-server-renderer')
 
-const serverRender = require('./server.render')
+// nodejs使用module模块执行文件 
+const NativeModule = require('module')
+const vm = require('vm')
+
+
+const serverRender = require('./server.render.no-bundle.js')
 // 服务端渲染webpack配置项
 const serverConfig = require('../../build/webpack.config.server')
 // 使用服务端渲染配置参数执行webpack 得到一个 webpack Compiler 实例
@@ -42,9 +47,26 @@ serverCompiler.watch({}, (err, stats) => {
   // vue服务端代码打包后的文件路径
   const bundlePath = path.join(
     serverConfig.output.path,
-    'vue-ssr-server-bundle.json'
+    'server-entry.js'
   )
-  bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
+  //使用createRenderer使用
+  try {
+    const m = {exports: {}}
+    const bundleStr = mfs.readFileSync(bundlePath, 'utf-8')
+    // NativeModule.wrap之后会在文件中包装一层function 参数为module,exports,require
+    const wrapper = NativeModule.wrap(bundleStr)
+    // vm.Script将字符串变为可以执行的js代码
+    const script = new vm.Script(wrapper, {
+      filename: 'server-entry.js',
+      displayErrors: true
+    })
+    // 
+    const result = script.runInThisContext()
+    result.call(m.exports, m.exports, require, m)
+    bundle = m.exports.default
+  } catch(err) {
+    console.error(err)
+  }
   console.log('new server bundle generated')
 })
 
@@ -60,13 +82,12 @@ const handleSSr = async (ctx) => {
   // 读取html模板
   const template = fs.readFileSync(path.resolve(__dirname, '../server.template.ejs'), 'utf-8')
   // 执行bundle拿到html模板
-  const renderer = VueServerRenderer.createBundleRenderer(bundle, {
-    runInNewContext: false,
+  const renderer = VueServerRenderer.createRenderer({
     // 关闭vue自动注入
     inject: false,
     clientManifest
   })
-  await serverRender(ctx, renderer, template)
+  await serverRender(ctx, renderer, template, bundle)
 }
 
 const router = new Router()

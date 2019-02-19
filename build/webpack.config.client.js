@@ -58,7 +58,9 @@ if (isDev) {
       filename: '[name].[chunkhash:8].js',
       publicPath: '/public/'
     },
-    plugins: defaultPlugins,
+    plugins: defaultPlugins.concat([
+      new webpack.NamedChunksPlugin()
+      ]),
     optimization: {
       splitChunks: {
         cacheGroups: {
